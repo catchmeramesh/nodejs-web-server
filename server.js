@@ -20,39 +20,50 @@ hbs.registerHelper('screamIt',(text)=>{
 });
 
 
-app.use((req,res,next)=>{
-    res.render('maintenance.hbs');
-});
+
+// app.use((req,res,next)=>{
+//     res.render('maintenance.hbs');
+// });
 
 
 
 app.use((req,res,next)=>{
     var serverDate = new Date().toString();
     var log = `${serverDate}: ${req.method}  ${req.url}`;
-    console.log(log);
+    // console.log(log);
     fs.appendFileSync('server.log',log + '\n');
     next();
 });
 
+var welcomeMsg = 'Welcome to Ramesh Website.';
 
 app.get('/',(req,res)=>{
     res.render('index.hbs',{
-        title: 'Home page',
-        currentYear: new Date().getFullYear()
+        title: welcomeMsg
     })
 });
 
 app.get('/about',(req,res)=>{
-    res.send('About page.');
-})
+    res.render('about.hbs',{
+        title: welcomeMsg
+    }
+    );
+});
 
-
+app.get('/projects',(req,res)=>{
+    res.render('projects.hbs',{
+        title: welcomeMsg
+    });
+});
 
 app.get('/bad',(req,res)=>{
     res.send({
         errorMessage:'Unable to load the page!'
     })
 })
+
+
+
 
 app.listen(port,()=>{
     console.log(`Server is up an running in port ${port}`);
